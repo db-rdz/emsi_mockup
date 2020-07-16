@@ -1,22 +1,23 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <OccupationOverview></OccupationOverview>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import OccupationOverview from './components/OccupationOverview'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    OccupationOverview
   }
 }
 </script>
 
 <style>
+@import "~font-awesome/css/font-awesome.css";
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -24,5 +25,19 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.header1 {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-size: 24px !important;
+  font-weight: 700 !important;
+}
+
+.header2 {
+  color: #676767 !important;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-size: 1.3em !important;
+  font-weight: 900 !important;
+  
 }
 </style>

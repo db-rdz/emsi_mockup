@@ -22,5 +22,9 @@ npm run build
 npm run lint
 ```
 
+### Project Screenshot
+![alt text](https://github.com/db-rdz/emsi_mockup/blob/master/public/screenshot.png?raw=true)
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+

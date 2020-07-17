@@ -11,30 +11,18 @@
                 <thead>
                     <tr>
                         <th class="ten wide">Industry</th>
-                        <th class="right aligned">Occupation Jobs in Indsutry (2015)</th>
-                        <th class="right aligned">% of Occupation in Industry (2015)</th>
-                        <th class="right aligned">% of Total Jobs in Industry (2015)</th>
+                        <th class="right aligned">Occupation Jobs in Indsutry ({{year}})</th>
+                        <th class="right aligned">% of Occupation in Industry ({{year}})</th>
+                        <th class="right aligned">% of Total Jobs in Industry ({{year}})</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td class="industry"><i class="fa fa-building " aria-hidden="true"></i> Software Publishers</td>
-                        <td class="right aligned ">4,654</td>
-                        <td class="right aligned">37.7%</td>
-                        <td class="right aligned">8.8%</td>
-                    </tr>
-                    <tr>
-                        <td class="industry"><i class="fa fa-building " aria-hidden="true"></i> Software Publishers</td>
-                        <td class="right aligned">4,654</td>
-                        <td class="right aligned">37.7%</td>
-                        <td class="right aligned">8.8%</td>
-                    </tr>
-                    <tr>
-                        <td class="industry"><i class="fa fa-building " aria-hidden="true"></i> Software Publishers</td>
-                        <td class="right aligned">4,654</td>
-                        <td class="right aligned">37.7%</td>
-                        <td class="right aligned">8.8%</td>
-                    </tr>
+                    <industry-report-row  v-for="(industryObject, index) in industries" :key="index" 
+                        :industry="industryObject.title"
+                        :occupationJobs="industryObject.in_occupation_jobs"
+                        :industryJobs="industryObject.jobs"
+                        :totalJobs="totalJobs"
+                    />
                 </tbody>
                 </table>
         </div>
@@ -43,7 +31,27 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import IndustryReportRow from './IndustryReportRow';
+
 export default {
     name: 'IndustryReport',
+    components: {
+        IndustryReportRow,
+    },
+    computed: {
+        ...mapGetters([
+            'industryInfo',
+        ]),
+        industries() {            
+            return this.industryInfo.industries;
+        },
+        totalJobs() {
+            return this.industryInfo.jobs;
+        },
+        year() {
+            return this.industryInfo.year;
+        }
+    }
 }
 </script>

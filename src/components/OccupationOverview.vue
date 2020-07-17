@@ -6,14 +6,10 @@
             <report-header/>
             <!-------- SUMMARY SECTION --------->
             <summary-report/>
-            
             <!-------- TRENDS/GRAPH SECTION --------->
             <trends/>
-
             <!-------- INDUSTRIES SECTION --------->
             <industry-report/>
-            
-            
         </div>
   </div>
 </template>

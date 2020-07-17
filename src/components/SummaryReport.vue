@@ -6,77 +6,88 @@
             </span>
         </div>
         <div class="row">
-            <div class="five wide column top_border bottom_border right_border">
-                <div class="ui small statistic">
-                    <div class="value">
-                        12,352
-                    </div>
-                    <div class="label">
-                        <span class="title">Jobs (2015)</span><br>
-                        <span class="subtitle">190% <span class="green">above</span> National average</span>
-                    </div>
-                </div>
-            </div>
-            <div class="five wide column top_border bottom_border right_border">
-                <div class="ui small statistic">
-                    <div class="value green">
-                        + 10.2%
-                    </div>
-                    <div class="label">
-                        <span class="title">% Change (2013 - 2018)</span><br>
-                        <span class="subtitle">Nation <span class="green">+ 8.5%</span></span>
-                    </div>
-                </div>
-            </div>
-            <div class="five wide top_border bottom_border column">
-                <div class="ui small statistic">
-                    <div class="value">
-                        5,550
-                    </div>
-                    <div class="label">
-                        <span class="title">Median Hourly Earnings</span><br>
-                        <span class="subtitle">Nation: $38.20/hr</span>
-                    </div>
-                </div>
-            </div>
+            <report-statistic>
+                <template slot="value">{{regionalJobCount}}</template>
+                <template slot="title">{{jobsYear}}</template>
+                <span slot="subtitle">
+                    {{Math.round(jobsPerformance)}}% 
+                    <span :class="{green: jobsPerformance > 0}">{{ jobsPerformance > 0 ? 'above' : 'below' }}</span> National average
+                </span>
+            </report-statistic>
+
+            <report-statistic>
+                <template slot="value" class="value green">{{ regionalJobGrowth }}</template>
+                <template slot="title">{{growthDates}}</template>
+                <span slot="subtitle">Nation <span :class="{green: nationalJobGrowth > 0}"> + {{nationalJobGrowth}}% </span></span>
+            </report-statistic>
+
+            <report-statistic :rightBorder="false">
+                <template slot="value">{{regionalEarnings}}/hr</template>
+                <span slot="title">Median Hourly Earnings</span>
+                <template slot="subtitle">Nation: {{nationalAverageEarnings}}/hr</template>
+            </report-statistic>
         </div>
     </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import ReportStatistic from './ReportStatistic';
+
 export default {
     name: 'SummaryReport',
+    components: {
+        ReportStatistic
+    },
+    computed: {
+        ...mapGetters([
+            'summaryInfo',
+        ]),
+
+        /// Job Stats
+        jobsYear() {
+            return `Jobs ${this.summaryInfo.jobs.year}`;
+        },
+        regionalJobCount() {
+            return this.numberWithCommas(this.summaryInfo.jobs.regional);
+         },
+        jobsPerformance() {
+            return (this.summaryInfo.jobs.regional / this.summaryInfo.jobs.national_avg) * 100;
+        },
+
+        // Growth Stats
+        regionalJobGrowth() {
+            var growth = this.summaryInfo.jobs_growth.regional;
+                if (growth > 0) {
+                    return `+ ${growth}%`;
+                }
+            return `${growth}%`;
+        },
+        nationalJobGrowth() {
+            return this.summaryInfo.jobs_growth.national_avg;
+        },
+        growthDates() {
+            var start = this.summaryInfo.jobs_growth.start_year;
+            var end = this.summaryInfo.jobs_growth.end_year;
+            return `% Change (${start}-${end})`;
+        },
+
+        // Earning stats 
+        regionalEarnings() {
+            return this.summaryInfo.earnings.regional; 
+        },
+        nationalAverageEarnings() {
+            return this.summaryInfo.earnings.national_avg;
+        }
+    },
+    methods: {
+        numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+    }
 }
 </script>
 
 <style scoped>
 
-/* Stats Styling */
-.value {
-    font-weight: 200 !important;
-    color: #717171 !important;
-}
-
-.statistic {
-    padding-top: 3.5vh;
-    padding-bottom: 3.5vh;
-}
-
-.statistic .title {
-    color: #676767;
-    font-weight: bolder !important;
-    font-size: .9em;
-    text-transform: none !important;
-}
-
-.statistic .green {
-    color: #5dba4a !important;
-}
-
-.statistic .subtitle {
-    color: #535353;
-    font-weight: 600 !important;
-    font-size: .8em;
-    text-transform: none !important;
-}
 </style>

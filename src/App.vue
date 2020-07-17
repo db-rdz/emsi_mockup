@@ -1,17 +1,44 @@
 <template>
   <div id="app">
-    <OccupationOverview></OccupationOverview>
+    <div id="loading-overlay">
+        <img src="emsi-logo.svg" alt="Emsi">
+    </div>
+    <OccupationOverview v-if="loading == false"></OccupationOverview>
   </div>
 </template>
 
 <script>
-import OccupationOverview from './components/OccupationOverview'
+import OccupationOverview from './components/OccupationOverview';
+import store from './stores/AppStore';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'App',
+  data() {
+    return {
+      loading: true
+    }
+  },
   components: {
     OccupationOverview
-  }
+  },
+  store,
+  methods: {
+    ...mapActions([
+        'fetchReportData',
+    ]),
+  },
+  created() {
+    
+  },
+  mounted() {
+    /// Fetch the data for the view
+    this.fetchReportData().then(() => {
+      this.loading = false;
+      document.getElementById("loading-overlay").style.opacity = "0%";
+    });
+  },
+
 }
 </script>
 
@@ -40,4 +67,38 @@ export default {
   font-weight: 900 !important;
   
 }
+
+#loading-overlay {
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  opacity: 100%;
+  top: 50%;
+  z-index: 10;
+
+  text-align: center;
+  vertical-align: middle; 
+  transition: opacity 1s;
+}
+
+#app-content {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 0;
+}
+
+#loading-overlay img {
+  width: 20vw;
+  height: auto;
+}
+
 </style>

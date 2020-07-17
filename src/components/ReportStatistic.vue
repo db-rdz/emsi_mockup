@@ -50,7 +50,7 @@ export default {
     text-transform: none !important;
 }
 
-.statistic .green {
+.green {
     color: #5dba4a !important;
 }
 

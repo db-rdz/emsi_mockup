@@ -16,7 +16,7 @@
             </report-statistic>
 
             <report-statistic>
-                <template slot="value" class="value green">{{ regionalJobGrowth }}</template>
+                <span slot="value" :class="{ green: regionalJobGrowth > 0 }">{{ regionalJobGrowth > 0 ? `+ ${regionalJobGrowth}%` : `${regionalJobGrowth}%` }}</span>
                 <template slot="title">{{growthDates}}</template>
                 <span slot="subtitle">Nation <span :class="{green: nationalJobGrowth > 0}"> + {{nationalJobGrowth}}% </span></span>
             </report-statistic>
@@ -58,10 +58,7 @@ export default {
         // Growth Stats
         regionalJobGrowth() {
             var growth = this.summaryInfo.jobs_growth.regional;
-                if (growth > 0) {
-                    return `+ ${growth}%`;
-                }
-            return `${growth}%`;
+            return growth;
         },
         nationalJobGrowth() {
             return this.summaryInfo.jobs_growth.national_avg;

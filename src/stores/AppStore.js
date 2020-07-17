@@ -53,6 +53,9 @@ export default new Vuex.Store({
         },
         industryInfo: (state) => {
             return state.reportData.employing_industries;
+        },
+        trendComparison: (state) => {
+            return state.reportData.trend_comparison;
         }
     }
 });

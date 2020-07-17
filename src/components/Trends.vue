@@ -20,27 +20,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Region</td>
-                        <td class="right aligned">11,904</td>
-                        <td class="right aligned">13,114</td>
-                        <td class="right aligned">1,210</td>
-                        <td class="right aligned">10.2%</td>
-                    </tr>
-                    <tr>
-                        <td>State</td>
-                        <td class="right aligned">13,103</td>
-                        <td class="right aligned">14,469</td>
-                        <td class="right aligned">1,366</td>
-                        <td class="right aligned">10.4%</td>
-                    </tr>
-                    <tr>
-                        <td>Nation</td>
-                        <td class="right aligned">13,103</td>
-                        <td class="right aligned">14,469</td>
-                        <td class="right aligned">1,366</td>
-                        <td class="right aligned">10.4%</td>
-                    </tr>
+                    <trends-row v-for="(value, name) in regionInfo" :key="name"
+                        :region="name"
+                        :startJobCount="value[0]"
+                        :endJobCount="value[yearCount-1]"
+                    />
                 </tbody>
             </table>
         </div>
@@ -49,11 +33,51 @@
 
 <script>
 var Chart = require('chart.js');
+import { mapGetters } from 'vuex';
+import TrendsRow from './TrendsRow';
 
 export default {
     name: 'Trends',
-        mounted() {
-
+    components: {
+        TrendsRow,
+    },
+    computed: {
+        ...mapGetters([
+            'trendComparison',
+        ]),
+        regionInfo() {
+            this.trendComparison.regional;
+            return {
+                Region: this.trendComparison.regional,
+                State: this.trendComparison.state,
+                Nation: this.trendComparison.nation,
+            };
+        },
+        startYear() {
+            return this.trendComparison.start_year;
+        },
+        endYear() {
+            return this.trendComparison.end_year;
+        },
+        yearCount() {
+            return this.endYear - this.startYear;
+        },
+        // getGraphData() {
+            
+        // }
+    },
+    methods: {
+        getRegionValueByIndex(index) {
+            return this.trendComparison.regional[index];
+        },
+        getStateValueByIndex(index) {
+            return this.trendComparison.state[index];
+        },
+        getNationValueByIndex(index) {
+            return this.trendComparison.nation[index];
+        }
+    },
+    mounted() {
         new Chart(document.getElementById("line-chart"), {
             type: 'line',
             data: {

@@ -17,7 +17,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <industry-report-row  v-for="(industryObject, index) in industries" :key="index" 
+                    <industry-report-row :id="`industry${index}`" class='industry_row' v-for="(industryObject, index) in industries" :key="index" 
                         :industry="industryObject.title"
                         :occupationJobs="industryObject.in_occupation_jobs"
                         :industryJobs="industryObject.jobs"
@@ -52,6 +52,25 @@ export default {
         year() {
             return this.industryInfo.year;
         }
+    },
+    mounted() {
+        for (var i = 0; i < this.industries.length; i++) {
+            var percentage = (this.industries[i].in_occupation_jobs/this.totalJobs) * 100;
+            document.getElementById(`industry${i}`).style.background = `linear-gradient(90deg, #e9f2f8 ${percentage}%, transparent 0%)`;
+        }
+
     }
 }
 </script>
+
+<style>
+    .industry_row {
+        padding-left: 300px !important;
+        background: linear-gradient(90deg, #e9f2f8 70%, transparent 0%);
+    }
+
+    td {
+        padding-left: 15px !important;   
+    }
+
+</style>

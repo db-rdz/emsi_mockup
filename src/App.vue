@@ -70,30 +70,16 @@ export default {
 
 #loading-overlay {
   width: 100%; /* Full width (cover the whole page) */
-  height: 100%; /* Full height (cover the whole page) */
+  height: 100vh; /* Full height (cover the whole page) */
 
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-
-  opacity: 100%;
   top: 50%;
+  opacity: 100%;
   z-index: 10;
 
   text-align: center;
   vertical-align: middle; 
   transition: opacity 1s;
-}
-
-#app-content {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 0;
 }
 
 #loading-overlay img {

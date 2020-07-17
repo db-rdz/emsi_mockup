@@ -1,6 +1,6 @@
 <template>
     <tr>
-        <td>{{region}}</td>
+        <td><slot/> {{region}}</td>
         <td class="right aligned">{{startJobCount}}</td>
         <td class="right aligned">{{endJobCount}}</td>
         <td class="right aligned">{{change}}</td>

@@ -13,8 +13,8 @@
                 <thead>
                     <tr>
                         <th class="nine wide">Region</th>
-                        <th class="right aligned">2013 Jobs</th>
-                        <th class="right aligned">2018 Jobs</th>
+                        <th class="right aligned">{{startYear}} Jobs</th>
+                        <th class="right aligned">{{endYear}} Jobs</th>
                         <th class="right aligned">Change</th>
                         <th class="right aligned">% Change</th>
                     </tr>
@@ -24,7 +24,9 @@
                         :region="name"
                         :startJobCount="value[0]"
                         :endJobCount="value[yearCount-1]"
-                    />
+                    >
+                        <div :class="{ triangle: name == 'Nation', square: name == 'State', circle: name == 'Region' }"></div>
+                    </trends-row>
                 </tbody>
             </table>
         </div>
@@ -75,39 +77,81 @@ export default {
         },
         getNationValueByIndex(index) {
             return this.trendComparison.nation[index];
+        },
+        roundToOneDecimal(value) {
+            return Math.round(value * 1000) / 10;
+        },
+        computeChangePercentage(startValue, endValue) {
+            return this.roundToOneDecimal((endValue - startValue)/startValue);
         }
     },
     mounted() {
+
+        var chartLabels = [];
+
+        for (var year = this.startYear; year <= this.endYear; year++) {
+            chartLabels.push(year);
+        }
+
+        var regionDataSet = [0];
+        var stateDataSet = [0];
+        var nationDataSet = [0];
+
+        for (var i = 1; i <= this.yearCount; i++) {
+            // Loop through the data and create the data sets 
+            // Make sure that the index exists in the data given before trying to add the value in
+            if (this.regionInfo.Region[i]) {
+                regionDataSet.push(this.computeChangePercentage(this.regionInfo.Region[i-1], this.regionInfo.Region[i]))
+            }
+
+            if (this.regionInfo.State[i]) {
+                stateDataSet.push(this.computeChangePercentage(this.regionInfo.State[i-1], this.regionInfo.State[i]))
+            }
+            
+            if (this.regionInfo.Nation[i]) {
+                nationDataSet.push(this.computeChangePercentage(this.regionInfo.Nation[i-1], this.regionInfo.Nation[i]))
+            }
+            
+            
+        }
+
         new Chart(document.getElementById("line-chart"), {
             type: 'line',
             data: {
-                labels: [1500,1600,1700,1750,1800,1850,1900,1950,1999,2050],
+                labels: chartLabels,
                 datasets: [{ 
-                    data: [86,114,106,106,107,111,133,221,783,2478],
-                    label: "Africa",
-                    borderColor: "#3e95cd",
-                    fill: false
+                    lineTension: 0,
+                    data: regionDataSet,
+                    label: "Region",
+                    borderColor: "rgb(149,159,176)",
+                    fill: false,
+                    pointBorderColor: 'rgba(43,61,95,0)',
+                    pointBackgroundColor: 'rgba(43,61,95)',
+                    pointRadius: 7,
+                    pointStyle: 'circle'
+                    // pointBackgroundColor: 
                 }, { 
-                    data: [282,350,411,502,635,809,947,1402,3700,5267],
-                    label: "Asia",
-                    borderColor: "#8e5ea2",
-                    fill: false
+                    lineTension: 0,
+                    data: stateDataSet,
+                    label: "State",
+                    borderColor: "rgb(185,218,237)",
+                    fill: false,
+                    pointRadius: 7,
+                    pointBorderColor: 'rgba(43,61,95,0)',
+                    pointBackgroundColor: 'rgba(102,174,215)',
+                    pointStyle: 'rect'
                 }, { 
-                    data: [168,170,178,190,203,276,408,547,675,734],
-                    label: "Europe",
-                    borderColor: "#3cba9f",
-                    fill: false
-                }, { 
-                    data: [40,20,10,16,24,38,74,167,508,784],
-                    label: "Latin America",
-                    borderColor: "#e8c3b9",
-                    fill: false
-                }, { 
-                    data: [6,3,2,2,7,26,82,172,312,433],
-                    label: "North America",
-                    borderColor: "#c45850",
-                    fill: false
-                }
+                    lineTension: 0,
+                    data: nationDataSet,
+                    label: "Nation",
+                    borderColor: "rgb(227,242,253)",
+                    fill: false,
+                    pointRadius: 7,
+                    backgroundColor: 'rgb(227,242,253)',
+                    pointBorderColor: 'rgba(43,61,95,0)',
+                    pointBackgroundColor: 'rgba(182,223,252)',
+                    pointStyle: 'triangle'
+                }, 
                 ]
             },
             options: {
@@ -142,4 +186,34 @@ export default {
 #trends {
     padding-top: 2vh !important;
 }
+
+.circle {
+  height: 18px;
+  width: 18px;
+  margin-right: 13px;
+  display: inline-block;
+  background-color: rgba(43,61,95);
+  border-radius: 50%;
+}
+
+.square {
+  width: 15px; 
+  height: 15px; 
+  margin-right: 16px;
+  top: 50%;
+  display: inline-block;
+  background-color: rgba(102,174,215);
+}
+
+.triangle {
+  width: 0; 
+  height: 0; 
+  margin-right: 13px;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  display: inline-block;
+  border-bottom: 9px solid rgba(182,223,252, 1.0);
+}
+
+
 </style>

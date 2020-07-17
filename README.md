@@ -1,7 +1,9 @@
 # emsi_mockup
 
+
 ## Project setup
 ```
+npm install vue
 npm install
 ```
 
